@@ -20,7 +20,7 @@ def run_bot(r, comments_replied_to):
     print("Obtaining Comments")
 
     for comment in r.subreddit("test").comments(limit=25):
-        if wiki in comment.body and comment.id not in comments_replied_to:
+        if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me():
             print ("FOUND")
             comment.reply("Found!")
             print("Replied to Comment " + comment.id)
