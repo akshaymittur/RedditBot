@@ -4,6 +4,7 @@ import time
 
 wiki = "wikipedia.org"
 find = "!find"
+comments_replied_to = []
 
 def bot_login():
     print("Logging In")
@@ -15,16 +16,20 @@ def bot_login():
     print("Logged In")
     return r
 
-def run_bot(r):
+def run_bot(r, comments_replied_to):
     print("Obtaining Comments")
+
     for comment in r.subreddit("test").comments(limit=25):
-        if wiki in comment.body:
+        if wiki in comment.body and comment.id not in comments_replied_to:
             print ("FOUND")
             comment.reply("Found!")
             print("Replied to Comment " + comment.id)
-    print("Sleeping for 10 Seconds")
+
+            comments_replied_to.append(comment.id)
+
+    print("Sleeping for 5 Seconds")
     #Sleeping for 10 Seconds
-    time.sleep(10)
+    time.sleep(5)
 
 r = bot_login()
 run_bot(r)
