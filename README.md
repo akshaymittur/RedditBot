@@ -3,6 +3,6 @@
 ## Bot that comments out the summary of a wikipedia article of anything or fetches the youtube link of any song or video!
 ### To Run:
       1. Clone this repo
-      2. Change Username and Password in ``` config.py ``` as needed
+      2. Change Username and Password in config.py as needed
       3. Run bot.py
 Still in Development.
