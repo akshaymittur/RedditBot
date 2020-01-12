@@ -5,7 +5,6 @@ import os
 
 wiki = "wikipedia.org"
 find = "!find"
-comments_replied_to = []
 
 def bot_login():
     print("Logging In")
@@ -21,7 +20,7 @@ def run_bot(r, comments_replied_to):
     print("Obtaining Comments")
 
     for comment in r.subreddit("test").comments(limit=25):
-        if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me():
+        if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND")
             comment.reply("Found!")
             print("Replied to Comment " + comment.id)
@@ -42,7 +41,11 @@ def get_saved_comments():
         with open("comments_replied_to.txt", "r") as f:
             comments_replied_to = f.read()
             comments_replied_to = comments_replied_to.split("\n")
+            comments_replied_to = list(filter(None, comments_replied_to))
     return comments_replied_to
 
 r = bot_login()
-run_bot(r, comments_replied_to)
+comments_replied_to = get_saved_comments()
+
+while True:
+    run_bot(r, comments_replied_to)
