@@ -1,6 +1,7 @@
 import praw
 import config
 import time
+import os
 
 wiki = "wikipedia.org"
 find = "!find"
@@ -30,6 +31,14 @@ def run_bot(r, comments_replied_to):
     print("Sleeping for 5 Seconds")
     #Sleeping for 10 Seconds
     time.sleep(5)
+
+def get_saved_comments():
+    if not os.path.isfile("comments_replied_to.txt"):
+
+    with open("comments_replied_to.txt", "r") as f:
+        comments_replied_to = f.read()
+        comments_replied_to = comments_replied_to.split("\n")
+    return comments_replied_to
 
 r = bot_login()
 run_bot(r, comments_replied_to)
