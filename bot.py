@@ -28,16 +28,20 @@ def run_bot(r, comments_replied_to):
 
             comments_replied_to.append(comment.id)
 
+            with open("comments_replied_to.txt", "a") as f:
+                f.write(comment.id + "\n")
+
     print("Sleeping for 5 Seconds")
     #Sleeping for 10 Seconds
     time.sleep(5)
 
 def get_saved_comments():
     if not os.path.isfile("comments_replied_to.txt"):
-
-    with open("comments_replied_to.txt", "r") as f:
-        comments_replied_to = f.read()
-        comments_replied_to = comments_replied_to.split("\n")
+        comments_replied_to = []
+    else:
+        with open("comments_replied_to.txt", "r") as f:
+            comments_replied_to = f.read()
+            comments_replied_to = comments_replied_to.split("\n")
     return comments_replied_to
 
 r = bot_login()
