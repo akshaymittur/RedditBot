@@ -32,4 +32,4 @@ def run_bot(r, comments_replied_to):
     time.sleep(5)
 
 r = bot_login()
-run_bot(r)
+run_bot(r, comments_replied_to)
