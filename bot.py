@@ -75,8 +75,11 @@ def run_bot(r, comments_replied_to):
         if find in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND FIND")
             url = "https://www.youtube.com/results?search_query="
-            print(re.search(r'(?<=!find)[^.]*',comment.body).group(0))
+            search = re.search(r'(?<=!find)[^.]*',comment.body).group(0)
 
+            search = search.replace(" ", "+")
+            url += search[1:]
+            print(url)
             #comment.reply()
 
             comments_replied_to.append(comment.id)
