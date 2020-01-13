@@ -31,14 +31,17 @@ def run_bot(r, comments_replied_to):
             with open("comments_replied_to.txt", "a") as f:
                 f.write(comment.id + "\n")
 
-         if joke in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
+        if joke in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND JOKE")
             reply = "You Requested a Joke, Here it is! \n\n"
             joke_type = "twopart"
-            while joke_type == "twopart"
+            while joke_type == "twopart":
                 random_joke = requests.get("https://sv443.net/jokeapi/category/Any").json()
-                joke_type = random_joke["type"]
-                punchline = random_joke["joke"]
+                if joke_type == random_joke["type"]:
+                    continue
+                else :
+                    punchline = random_joke["joke"]
+                    joke_type = random_joke["type"]
 
             comment.reply(reply + ">" + punchline)
 
