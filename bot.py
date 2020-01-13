@@ -2,9 +2,11 @@ import praw
 import config
 import time
 import os
+import requests
 
 wiki = "wikipedia.org"
 find = "!find"
+joke = "!joke"
 
 def bot_login():
     print("Logging In")
@@ -21,9 +23,24 @@ def run_bot(r, comments_replied_to):
 
     for comment in r.subreddit("test").comments(limit=25):
         if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
-            print ("FOUND")
+            print ("FOUND WIKI")
             comment.reply("Found!")
-            print("Replied to Comment " + comment.id)
+
+            comments_replied_to.append(comment.id)
+
+            with open("comments_replied_to.txt", "a") as f:
+                f.write(comment.id + "\n")
+
+         if joke in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
+            print ("FOUND JOKE")
+            reply = "You Requested a Joke, Here it is! \n\n"
+            joke_type = "twopart"
+            while joke_type == "twopart"
+                random_joke = requests.get("https://sv443.net/jokeapi/category/Any").json()
+                joke_type = random_joke["type"]
+                punchline = random_joke["joke"]
+
+            comment.reply(reply + ">" + punchline)
 
             comments_replied_to.append(comment.id)
 
