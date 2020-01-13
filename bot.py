@@ -78,16 +78,20 @@ def run_bot(r, comments_replied_to):
             url = "https://www.youtube.com/results?search_query="
             search = re.search(r'(?<=!find)[^.]*',comment.body).group(0)
 
-            search = search.replace(" ", "+")
-            url += search[1:]
+            if len(search):
+                search = search.replace(" ", "+")
+                url += search[1:]
 
-            response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            div = [ d for d in soup.find_all("div") if d.has_attr("class") and "yt-lockup-dismissable" in d["class"] ]
-            a = [ x for x in div[0].find_all("a") if x.has_attr("title") ]
+                response = requests.get(url)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                div = [ d for d in soup.find_all("div") if d.has_attr("class") and "yt-lockup-dismissable" in d["class"] ]
+                a = [ x for x in div[0].find_all("a") if x.has_attr("title") ]
 
-            comment.reply(reply + ">" +"https://www.youtube.com" + a[0]["href"])
+                comment.reply(reply + ">" +"https://www.youtube.com" + a[0]["href"])
 
+            else:
+                comment.reply("Sorry! Not Found")
+                
             comments_replied_to.append(comment.id)
 
             with open("comments_replied_to.txt", "a") as f:
