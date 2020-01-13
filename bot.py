@@ -3,12 +3,15 @@ import config
 import time
 import os
 import requests
+from bs4 import BeautifulSoup
+import re
 
 wiki = "wikipedia.org"
 find = "!find"
 joke = "!joke"
 kanye = "!kanye"
 
+#For Logging In
 def bot_login():
     print("Logging In")
     r = praw.Reddit(username = config.username,
@@ -19,10 +22,13 @@ def bot_login():
     print("Logged In")
     return r
 
+#For Running Bot
 def run_bot(r, comments_replied_to):
     print("Obtaining Comments")
 
+    #Finding Comments
     for comment in r.subreddit("test").comments(limit=25):
+        #Finding Comments with wiki, and replying with wikipedia summary
         if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND WIKI")
             comment.reply("Found!")
@@ -32,6 +38,7 @@ def run_bot(r, comments_replied_to):
             with open("comments_replied_to.txt", "a") as f:
                 f.write(comment.id + "\n")
 
+        #Finding Comments with joke, and replying with a joke
         if joke in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND JOKE")
             reply = "You Requested a Joke, Here it is! \n\n"
@@ -51,12 +58,26 @@ def run_bot(r, comments_replied_to):
             with open("comments_replied_to.txt", "a") as f:
                 f.write(comment.id + "\n")
 
+        #Finding Comments with kanye, and replying with a kanye quote
         if kanye in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND KANYE")
             reply = "You Requested a Kanye West Quote, Here it is! \n\n"
             quote = requests.get("https://api.kanye.rest/").json()["quote"]
 
             comment.reply(reply + ">" + quote)
+
+            comments_replied_to.append(comment.id)
+
+            with open("comments_replied_to.txt", "a") as f:
+                f.write(comment.id + "\n")
+
+        #Finding Comments with find, and replying with a youtube link
+        if find in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
+            print ("FOUND FIND")
+            url = "https://www.youtube.com/results?search_query="
+            print(re.search(r'(?<=!find)[^.]*',comment.body).group(0))
+
+            #comment.reply()
 
             comments_replied_to.append(comment.id)
 
