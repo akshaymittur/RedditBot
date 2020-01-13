@@ -7,6 +7,7 @@ import requests
 wiki = "wikipedia.org"
 find = "!find"
 joke = "!joke"
+kanye = "!kanye"
 
 def bot_login():
     print("Logging In")
@@ -44,6 +45,18 @@ def run_bot(r, comments_replied_to):
                     joke_type = random_joke["type"]
 
             comment.reply(reply + ">" + punchline)
+
+            comments_replied_to.append(comment.id)
+
+            with open("comments_replied_to.txt", "a") as f:
+                f.write(comment.id + "\n")
+
+        if kanye in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
+            print ("FOUND KANYE")
+            reply = "You Requested a Kanye West Quote, Here it is! \n\n"
+            quote = requests.get("https://api.kanye.rest/").json()["quote"]
+
+            comment.reply(reply + ">" + quote)
 
             comments_replied_to.append(comment.id)
 
