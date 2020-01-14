@@ -5,8 +5,9 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import re
+import wikipediaapi
 
-wiki = "wikipedia.org"
+wiki = "!wiki"
 find = "!find"
 joke = "!joke"
 kanye = "!kanye"
@@ -31,7 +32,21 @@ def run_bot(r, comments_replied_to):
         #Finding Comments with wiki, and replying with wikipedia summary
         if wiki in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me:
             print ("FOUND WIKI")
-            comment.reply("Found!")
+            reply = "You Requested a Wikipedia Summary, Here it is! \n\n"
+
+            search = re.search(r'(?<=!wiki)[^.]*',comment.body).group(0)
+            search = search[1:]
+
+            wiki_lang = wikipediaapi.Wikipedia('en')
+            wiki_page = wiki_lang.page(search)
+
+            if not wiki_page.exists():
+                comment.reply("Sorry, Page Does Not Exist!")
+            else:
+                if "may refer to" in wiki_page.summary:
+                    comment.reply("Be More Specific Please!")
+                else:
+                    comment.reply(reply + ">" + wiki_page.summary)
 
             comments_replied_to.append(comment.id)
 
